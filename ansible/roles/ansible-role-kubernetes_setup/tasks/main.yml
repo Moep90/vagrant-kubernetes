@@ -1,0 +1,33 @@
+---
+# tasks file for ansible-role-kubernetes_setup
+
+- name: KUBE-CLUSTER | Install prequesits
+  apt:
+    name: "{{ kubernetes_prequesits }}"
+    state: "present"
+  become: true
+
+- name: KUBE-CLUSTER | Add apt-key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  become: true
+
+- name: KUBE-CLUSTER | Add Repository
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+  become: true
+
+- name: KUBE-CLUSTER | Install Kubernetes
+  apt:
+    name: "{{ kubernetes_packages }}"
+    state: present
+  become: true
+
+- name: KUBE-CLUSTER | Mark Kubernetes packages for HOLD
+  command: "apt-mark hold {{ item }}"
+  loop: "{{ lookup('list', kubernetes_packages)}}"
+  tags:
+    - skip_ansible_lint
+  become: true

@@ -1,0 +1,16 @@
+---
+# defaults file for ansible-role-kubernetes_setup
+
+kubernetes_prequesits:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg2
+  - software-properties-common
+  - net-tools
+  - ipvsadm
+
+kubernetes_packages:
+  - kubelet
+  - kubeadm
+  - kubectl
